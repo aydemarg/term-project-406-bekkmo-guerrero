@@ -1,6 +1,7 @@
 # term-project-406-bekkmo-guerrero
 How well can GDP per capita, population size, and health expenditure predict Olympic medal counts across countries in the Winter Olympics?
-
+* use summer and winter
+  
 # Tentative Analysis Plan
 
 We will conduct a descriptive and predictive analysis of Olympic performance across countries.
@@ -22,6 +23,9 @@ The goal is to understand how well economic and demographic factors can predict 
 # Challenge
 
 Although we previously worked with basic HTML scraping in rvest and simple API requests using httr, our challenge for this project is to use a more advanced data collection workflow. We plan to retrieve country-level indicators through the World Bank API using httr2, including multiple variables and years, and combine those data with Olympic medal tables collected from the web.
+
+* Learn some additional machine learning algorithms that we could use, run different machine learning models and compare them with basic ones or the ones that we learned in class.
+* When we do the prediction find more variables, the ones we have right now are ok to use to look at the initial data relationship.
 
 # Datasets
 Dataset 1: Olympic Medal Tables
