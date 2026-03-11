@@ -1,12 +1,11 @@
 # term-project-406-bekkmo-guerrero
-How well can GDP per capita, population size, and health expenditure predict Olympic medal counts across countries in the Winter Olympics?
-* use summer and winter
+How well can GDP per capita, population size, health expenditure, and other variables predict Olympic medal counts across countries in the Summer and Winter Olympics?
   
 # Tentative Analysis Plan
 
 We will conduct a descriptive and predictive analysis of Olympic performance across countries.
 
-First, we will collect Olympic medal data by country and year. Then we will merge this dataset with economic and demographic indicators such as GDP per capita, population, and health expenditure.
+First, we will collect Olympic medal data by country and year. Then we will merge this dataset with economic and demographic indicators such as GDP per capita, population, and health expenditure. We also plan to add more variables based on available data.
 
 The analysis will include:
 
@@ -16,7 +15,7 @@ Scatterplots showing relationships between GDP per capita and medal counts
 
 Comparisons of medal counts across countries with different population sizes
 
-A regression model predicting medal counts using GDP per capita, population, and health expenditure
+A regression model predicting medal counts using GDP per capita, population, health expenditure, and more variables
 
 The goal is to understand how well economic and demographic factors can predict Olympic success.
 
@@ -24,8 +23,7 @@ The goal is to understand how well economic and demographic factors can predict 
 
 Although we previously worked with basic HTML scraping in rvest and simple API requests using httr, our challenge for this project is to use a more advanced data collection workflow. We plan to retrieve country-level indicators through the World Bank API using httr2, including multiple variables and years, and combine those data with Olympic medal tables collected from the web.
 
-* Learn some additional machine learning algorithms that we could use, run different machine learning models and compare them with basic ones or the ones that we learned in class.
-* When we do the prediction find more variables, the ones we have right now are ok to use to look at the initial data relationship.
+While variables such as GDP per capita, population size, and health expenditure are  indicators of Olympic success, their predictive power may be limited. Our challenge for this project is to learn some additional machine learning algorithms that we could use, run different machine learning models, and compare them with basic ones or the ones that we learned in class in order to improve predictive accuracy.
 
 # Datasets
 Dataset 1: Olympic Medal Tables
@@ -71,6 +69,8 @@ GDP per capita
 total population
 
 health expenditure per capita
+
+*additional indicators*
 
 Timespan:
 1992–2026
