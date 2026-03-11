@@ -49,7 +49,7 @@ bronze medals
 total medals
 
 Timespan:
-Last 10 Summer and Winter Olympic Games each (1988–2026).
+Last 10 Summer Olympic Games and Last 10 Winter Olympic Games (1988–2026).
 
 Spatial coverage:
 All countries participating in the Summer and Winter Olympic Games.
@@ -76,7 +76,7 @@ Timespan:
 1992–2026
 
 Spatial coverage:
-Countries worldwide that participated in the Winter Olympics Games.
+Countries worldwide that participated in the Summer and Winter Olympic Games.
 
 # Relationship Between Datasets
 
