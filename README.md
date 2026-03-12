@@ -29,7 +29,8 @@ While variables such as GDP per capita, population size, and health expenditure 
 Dataset 1: Olympic Medal Tables
 
 Source:
-(https://en.wikipedia.org/wiki/Category:Summer_Olympics_medal_tables)(https://en.wikipedia.org/wiki/Category:Winter_Olympics_medal_tables)
+https://en.wikipedia.org/wiki/Category:Summer_Olympics_medal_tables
+https://en.wikipedia.org/wiki/Category:Winter_Olympics_medal_tables
 
 Description:
 This dataset contains medal tables for each Summer and Winter Olympic Games. The webpage lists a separate page for every Olympic year (for example: 2016, 2018, 2020, 2022, 2024, 2026), and each page includes a table showing the number of gold, silver, and bronze medals won by each country.
@@ -82,6 +83,6 @@ Countries worldwide that participated in the Summer and Winter Olympic Games.
 
 The datasets will be merged by country name and year.
 
-The Olympic dataset provides the outcome variable (medal counts), while the World Bank dataset provides economic and demographic predictors such as GDP per capita, population, and health expenditure.
+The Olympic dataset provides the outcome variable (medal counts), while the World Bank dataset provides economic and demographic predictors, including, but not limited to, GDP per capita, population, and health expenditure.
 
 Combining these datasets allows us to analyze how country-level economic factors relate to Olympic performance.
