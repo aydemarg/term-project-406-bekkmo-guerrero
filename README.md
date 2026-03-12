@@ -29,8 +29,7 @@ While variables such as GDP per capita, population size, and health expenditure 
 Dataset 1: Olympic Medal Tables
 
 Source:
-https://en.wikipedia.org/wiki/Category:Summer_Olympics_medal_tables
-https://en.wikipedia.org/wiki/Category:Winter_Olympics_medal_tables
+https://en.wikipedia.org/wiki/Category:Summer_Olympics_medal_tables and https://en.wikipedia.org/wiki/Category:Winter_Olympics_medal_tables
 
 Description:
 This dataset contains medal tables for each Summer and Winter Olympic Games. The webpage lists a separate page for every Olympic year (for example: 2016, 2018, 2020, 2022, 2024, 2026), and each page includes a table showing the number of gold, silver, and bronze medals won by each country.
