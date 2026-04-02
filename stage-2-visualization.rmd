@@ -9,5 +9,30 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Goal
+Import and clean datasets in R, restructure them into tidy format, and merge them into a unified data frame to support the development of insightful and informative visualizations.
 
-a
+```{r}
+# Packages
+library(tidyverse)
+library(rvest)
+library(httr)
+library(jsonlite)
+
+#Web Scraping
+
+#scrape the category page, get all links
+url = "https://en.wikipedia.org/wiki/Category:Summer_Olympics_medal_tables"
+
+page = read_html(url)
+
+#loop through each link
+links = page |>
+  html_nodes("#mw-pages a") |>   # this targets the list of pages
+  html_attr("href")
+
+links = paste0("https://en.wikipedia.org", links)
+
+links
+```
+
