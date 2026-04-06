@@ -341,3 +341,142 @@ indicators_final <- reduce(indicators_list, left_join, by = c("country", "year")
 
 olympics_indicators <- left_join(olympics_all, indicators_final, by = c("country", "year"))
 ```
+
+```{r}
+#----------------------------
+# Cleaning Data Set
+#---------------------------
+
+#Selecting data range from most complete years
+
+# Count non-missing indicators per year
+year_completeness <- olympics_indicators %>%
+  group_by(year) %>%
+  summarise(
+    non_missing = sum(!is.na(across(where(is.numeric)))),
+    total_values = n() * ncol(select(., where(is.numeric))),
+    completeness_ratio = non_missing / total_values
+  ) %>%
+  arrange(year)
+
+#Find where completeness increases a lot
+year_completeness <- year_completeness %>%
+  mutate(change = completeness_ratio - lag(completeness_ratio))
+
+start_year <- year_completeness %>%
+  filter(change == max(change, na.rm = TRUE)) %>%
+  pull(year)
+
+#filter data set to most complete years
+olympics_final <- olympics_indicators %>%
+  filter(year >= start_year)
+
+#Check how many years were kept
+summary(olympics_final$year)
+
+
+
+```
+
+
+```{r}
+#-----------------------------------------
+# Data set improved for visualization
+#-----------------------------------------
+
+#Check raw data
+
+#Medals Distribution
+ggplot(olympics_final, aes(x = total)) +
+  geom_histogram(bins = 30) +
+  labs(
+    title = "Raw Distribution of Olympic Medals",
+    x = "Total Medals",
+    y = "Number of Country-Year Observations"
+  ) +
+  theme_minimal()
+
+#GDP per capital
+ggplot(olympics_final, aes(x = gdp_per_capita_ppp)) +
+  geom_histogram(bins = 30) +
+  labs(
+    title = "Raw Distribution of GDP per Capita",
+    x = "GDP per Capita (PPP)",
+    y = "Number of Country-Year Observations"
+  ) +
+  theme_minimal()
+
+#population
+ggplot(olympics_final, aes(x = population_total)) +
+  geom_histogram(bins = 30) +
+  labs(
+    title = "Raw Distribution of Population",
+    x = "Population",
+    y = "Number of Country-Year Observations"
+  ) +
+  theme_minimal()
+
+#Normalizing to improve is right skewed - Log transformation
+olympics_viz <- olympics_final %>%
+  mutate(
+    medals_per_million = total / (population_total / 1e6),
+    log_gdp = log(gdp_per_capita_ppp),
+    log_population = log(population_total)
+  )
+#Plots after transformation
+#Medals Distribution 
+ggplot(olympics_viz, aes(x = medals_per_million)) +
+  geom_histogram(bins = 30, fill = "steelblue", color = "white") +
+  coord_cartesian(xlim = c(0, 10)) +
+  labs(
+    title = "Distribution of Medals per Million People (Zoomed In)",
+    x = "Medals per Million",
+    y = "Number of Country-Year Observations"
+  ) +
+  theme_minimal()
+
+#GDP per capital
+ggplot(olympics_viz, aes(x = log_gdp)) +
+  geom_histogram(bins = 30, fill = "steelblue", color = "white") +
+  labs(
+    title = "Log-Transformed GDP per Capita Distribution",
+    x = "Log GDP per Capita",
+    y = "Number of Country-Year Observations"
+  ) +
+  theme_minimal()
+
+#Population
+ggplot(olympics_viz, aes(x = log_population)) +
+  geom_histogram(bins = 30, fill = "steelblue", color = "white") +
+  labs(
+    title = "Log-Transformed Population Distribution",
+    x = "Log Population",
+    y = "Number of Country-Year Observations"
+  ) +
+  theme_minimal()
+
+#Understand relationships between variables
+
+#relationship between GDP and Medals
+ggplot(olympics_viz, aes(x = log_gdp, y = medals_per_million)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Relationship Between GDP per Capita and Olympic Success",
+    x = "Log GDP per Capita",
+    y = "Medals per Million"
+  ) +
+  theme_minimal()
+
+#relationship 
+ggplot(olympics_viz, aes(x = log_population, y = medals_per_million)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Relationship Between Population and Olympic Success",
+    x = "Log Population",
+    y = "Medals per Million"
+  ) +
+  theme_minimal()
+```
+
