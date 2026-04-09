@@ -9,32 +9,70 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-*Motivation*
-*How well Economic Indicators predict Olympic medal counts across countries in the Summer and Winter Olympics?*
+## Motivation
 
-We were inspired to do this topic since the windter olympics 2026 took place in italy at the beggining of the year. We were curious to look into inconomic indicators predicting the number of medals that a country could win. 
+### How well Economic Indicators predict Olympic medal counts across countries in the Summer and Winter Olympics?*
 
-*Data*
+We chose this topic because the 2026 Winter Olympics in Italy sparked our interest in understanding why some countries perform better than others in the Olympic Games. This led us to explore whether economic indicators can help predict how many medals a country wins in both the Summer and Winter Olympics.
 
-Our project mainly ralies in 2 datasets, one is the olympic medals data form the summer and winter games, this data we were able to webscraped it from wikipedia, the economic indicators we got them from the world bank open source data, were we were able to pull many diferent economic indicator for a country development. 
+We were especially interested in looking at whether broader measures of development, such as GDP, population, labor market conditions, and education-related indicators, are associated with Olympic success.
 
-*Data Wrangeling*
+## Data Sources
 
-Wikipedia: To collect the data from Wikipedia, we scraped the category pages for Summer and Winter Olympic medal tables and extracted the links for each year’s medal table page. Because the medal table was not always in the same position on every page, we looped through all tables on each page and identified the correct one using column names such as rank, gold, silver, bronze, and total. We then cleaned the extracted data and kept the country name, medal counts by type, total medals, year, and season. After repeating the same process for both the Summer and Winter Games, we combined the two datasets into one complete Olympic medal dataset.
+### Olympic Medal Data and World Bank Indicators
 
-World Bank: 
+Our project relies on two main data sources. The first is Olympic medal data from the Summer and Winter Games, which we web scraped from Wikipedia medal tables. The second is economic and demographic data from the World Bank Open Data platform, from which we collected a wide range of country-level indicators related to economic development.
 
+The Olympic dataset provides information on medal counts by country, year, and season, while the World Bank dataset adds economic and social context for each country-year observation. Combining these two sources allowed us to study how national characteristics may relate to Olympic performance.
 
-Main Data Set: once we organized and clean wikipedia data and the world bank data, we looked at plot of the raw data to see what shape the data had. after looking at the raw plots, you can find some exaples bellow, we decided that we should apply a log transformation since the data was very hight skeewed, by doing the log transformation we were able to have the data more centered for visualization it make the data better in some data points and in others the skeewness is so strong that the transformation didn't take away. see plots bellow for exploring plots after transformation.
+## Data Wrangling and Preparation
+### Building the Main Dataset
+
+After collecting the Olympic medal data from Wikipedia and the economic indicators from the World Bank API, we cleaned and combined both sources into one main dataset.
+
+For the Olympic data, we scraped the Wikipedia category pages for both Summer and Winter Olympic medal tables, extracted the yearly page links, and looped through each page to identify the correct medal table. Since the medal table was not always located in the same position on each page, we identified it by checking for key columns such as rank, gold, silver, bronze, and total. We then cleaned country names, removed unnecessary rows such as totals and mixed teams, and added the corresponding year and season.
+
+For the World Bank data, we downloaded multiple economic and demographic indicators by country and year, then combined them into one wide dataset. We then left-joined the World Bank data with the Olympic medal data by country and year so that each Olympic observation could be matched with the available country-level indicators.
+
+### Exploring the Variables
+
+Once the datasets were merged, we explored the raw variables to better understand their distributions. These initial plots showed that several variables, especially GDP and population, were strongly right-skewed. Because of this, we applied log transformations to improve the distributions and make the visualizations easier to interpret.
+
+Medal-related variables, however, remained somewhat skewed even after transformation. This is expected, since many countries win very few medals while a small number of countries win many.
+
+### Selecting the Most Complete Time Period
+
+Because the World Bank data were incomplete for some countries and earlier years, we also conducted a completeness check by year. We measured the amount of non-missing data available across indicators and identified the period with the strongest overall coverage.
+
+This step allowed us to focus the analysis on the years with the most complete information, creating a cleaner and more reliable dataset for visualization.
 
 ![](output/figures/fig1_raw_medal_distribution.png)
 ![](output/figures/fig2_raw_dist_GDPpercap.png)
 ![](output/figures/fig4_log_dist.png)
 
+
 ![](output/figures/fig5_log_dist_GDPpercap.png)
 
+## Figures Developed
+
+### Global Distribution of Olympic Medal Totals
 
 
+![](output/figures/fig11_worldmap_participation.png)
+
+This figure uses a choropleth map to show Olympic medal totals by country for the Summer and Winter Olympics. A map was chosen because the goal is to show geographic patterns in medal distribution across the world, and faceting by season allows an easy comparison between Summer and Winter Games. Color intensity represents total medals, with darker colors indicating higher totals. Because medal totals are highly skewed, a square-root transformation was applied to the color scale so that differences among countries with smaller medal totals are still visible. Gray countries are countries that do not appear in the medal dataset.
+
+### Countries That Overperform Relative to Economic Expectations
+
+![](output/figures/fig12_overperform_countries.png)
+### Relationship Between Economic Development and Olympic Success
+![](output/figures/fig13_dist_GDP_sucesslevel.png)
+
+### Economic Development and Medal Type Distribution
+![](output/figures/fig14_medals_type.png)
+
+### Medal Composition of Top Olympic Countries
+![](output/figures/fig15_top10_medal_comp.png)
 
 
 
