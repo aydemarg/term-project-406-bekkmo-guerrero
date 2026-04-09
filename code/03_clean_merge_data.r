@@ -1,4 +1,5 @@
 
+
 #load Packages
 library(tidyverse)
 
@@ -41,16 +42,8 @@ summary(olympics_final$year)
 #--------------------------
 #Data log Transformation
 #--------------------------
-#Normalizing to improve is right skewed - Log transformation
-olympics_viz <- olympics_final %>%
-  mutate(
-    medals_per_million = total / (population_total / 1e6),
-    log_gdp = log(gdp_per_capita_ppp),
-    log_population = log(population_total)
-  )
-
 #removing NAs since log can't have zeros
-olympics_viz_clean <- olympics_viz %>%
+olympics_viz <- olympics_final %>%
   filter(
     !is.na(log_population),
     !is.na(medals_per_million),
@@ -59,4 +52,4 @@ olympics_viz_clean <- olympics_viz %>%
   )
 
 #save clean data
-save(olympics_viz_clean, file = "data_clean/olympics_viz_clean.RData")
+save(olympics_viz, file = "data_clean/olympics_viz.RData")
