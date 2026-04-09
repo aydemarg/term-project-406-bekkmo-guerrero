@@ -44,7 +44,7 @@ Medal-related variables, however, remained somewhat skewed even after transforma
 
 ![](output/figures/fig1-6_raw-log_dist.png)
 
-Education spending was did not appear to be very skewed and life expectancy appeared to be left-skewed, so we decided to keep these variables as they are without a log transformation.
+Education spending did not appear to be very skewed and life expectancy appeared to be left-skewed, so we decided to keep these variables as they are without a log transformation.
 
 ![](output/figures/fig4-5_raw_dist_Educ-Life.png)
 
