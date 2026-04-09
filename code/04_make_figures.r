@@ -1,25 +1,28 @@
 #Packages
 
+library(tidyverse)
+library(patchwork)
 
 #Load Data
-load("data_clean/olympics_viz_clean.RData")
+load("data_clean/olympics_final.RData")
 
 #Check raw data plots
 
 #Medals Distribution
 p1 = ggplot(olympics_final, aes(x = total)) +
-  geom_histogram(bins = 30) +
+  geom_histogram(fill = "steelblue", color = "white", bins = 30) +
   labs(
     title = "Raw Distribution of Olympic Medals",
     x = "Total Medals",
     y = "Number of Country-Year Observations"
   ) +
   theme_minimal()
+
 ggsave("output/figures/fig1_raw_medal_distribution.png", plot = p1, width = 8, height = 5, dpi = 300)
 
 #GDP per capital
 p2 = ggplot(olympics_final, aes(x = gdp_per_capita_ppp)) +
-  geom_histogram(bins = 30) +
+  geom_histogram(fill = "steelblue", color = "white", bins = 30) +
   labs(
     title = "Raw Distribution of GDP per Capita",
     x = "GDP per Capita (PPP)",
@@ -31,7 +34,7 @@ ggsave("output/figures/fig2_raw_dist_GDPpercap.png", plot = p2, width = 8, heigh
 
 #population
 p3 = ggplot(olympics_final, aes(x = population_total)) +
-  geom_histogram(bins = 30) +
+  geom_histogram(fill = "steelblue", color = "white", bins = 30) +
   labs(
     title = "Raw Distribution of Population",
     x = "Population",
@@ -39,8 +42,33 @@ p3 = ggplot(olympics_final, aes(x = population_total)) +
   ) +
   theme_minimal()
 
-ggsave("output/figures/fig3_raw_dist_GDPpercap.png", plot = p3, width = 8, height = 5, dpi = 300)
+ggsave("output/figures/fig3_raw_dist_Population.png", plot = p3, width = 8, height = 5, dpi = 300)
 
+#education spending
+p4 = ggplot(olympics_final, aes(x = education_spending)) +
+  geom_histogram(fill = "steelblue", color = "white", bins = 30) +
+  labs(
+    title = "Raw Distribution of Education Spending",
+    x = "Education Spending",
+    y = "Number of Country-Year Observations"
+  ) +
+  theme_minimal()
+
+ggsave("output/figures/fig4_raw_dist_EducationSpending.png", plot = p4, width = 8, height = 5, dpi = 300)
+
+#life expectancy
+p5 = ggplot(olympics_final, aes(x = life_expectancy.x)) +
+  geom_histogram(fill = "steelblue", color = "white", bins = 30) +
+  labs(
+    title = "Raw Distribution of Life Expectancy",
+    x = "Life Expectancy",
+    y = "Number of Country-Year Observations"
+  ) +
+  theme_minimal()
+
+ggsave("output/figures/fig5_raw_dist_LifeExpectancy.png", plot = p5, width = 8, height = 5, dpi = 300)
+
+ggsave("output/figures/fig4-5_raw_dist_Educ-Life.png", plot = p4 + p5, width = 8, height = 5, dpi = 300)
 
 #--------------------------
 #Data log Transformation
@@ -49,15 +77,22 @@ ggsave("output/figures/fig3_raw_dist_GDPpercap.png", plot = p3, width = 8, heigh
 #Plots after transformation
 #Medals Distribution 
 
-olympics_viz <- olympics_final %>%
+olympics_viz_clean <- olympics_final %>%
   mutate(
     medals_per_million = total / (population_total / 1e6),
     log_gdp = log(gdp_per_capita_ppp),
     log_population = log(population_total),
     log_total_medals = log1p(total)
+  ) %>%
+  #removing NAs since log can't have zeros
+  filter(
+    !is.na(log_population),
+    !is.na(medals_per_million),
+    is.finite(log_population),
+    is.finite(medals_per_million)
   )
 
-p4 = ggplot(olympics_viz, aes(x = log_total_medals)) +
+p6 = ggplot(olympics_viz_clean, aes(x = log_total_medals)) +
   geom_histogram(bins = 30, fill = "steelblue", color = "white") +
   labs(
     title = "Log-Transformed Distribution of Olympic Medals",
@@ -66,10 +101,12 @@ p4 = ggplot(olympics_viz, aes(x = log_total_medals)) +
   ) +
   theme_minimal()
 
-ggsave("output/figures/fig4_log_dist.png", plot = p4, width = 8, height = 5, dpi = 300)
+ggsave("output/figures/fig6_log_dist.png", plot = p6, width = 8, height = 5, dpi = 300)
+
+ggsave("output/figures/fig1-6_raw-log_dist.png", plot = p1 + p6, width = 8, height = 5, dpi = 300)
 
 #GDP per capital
-p5 = ggplot(olympics_viz_clean, aes(x = log_gdp)) +
+p7 = ggplot(olympics_viz_clean, aes(x = log_gdp)) +
   geom_histogram(bins = 30, fill = "steelblue", color = "white") +
   labs(
     title = "Log-Transformed GDP per Capita Distribution",
@@ -78,10 +115,10 @@ p5 = ggplot(olympics_viz_clean, aes(x = log_gdp)) +
   ) +
   theme_minimal()
 
-ggsave("output/figures/fig5_log_dist_GDPpercap.png", plot = p5, width = 8, height = 5, dpi = 300)
+ggsave("output/figures/fig7_log_dist_GDPpercap.png", plot = p7, width = 8, height = 5, dpi = 300)
 
 #Population
-p6 = ggplot(olympics_viz_clean, aes(x = log_population)) +
+p8 = ggplot(olympics_viz_clean, aes(x = log_population)) +
   geom_histogram(bins = 30, fill = "steelblue", color = "white") +
   labs(
     title = "Log-Transformed Population Distribution",
@@ -90,12 +127,14 @@ p6 = ggplot(olympics_viz_clean, aes(x = log_population)) +
   ) +
   theme_minimal()
 
-ggsave("output/figures/fig6_log_dist_pop.png", plot = p6, width = 8, height = 5, dpi = 300)
+ggsave("output/figures/fig8_log_dist_pop.png", plot = p8, width = 8, height = 5, dpi = 300)
+
+ggsave("output/figures/fig7-8_log_dist_GDP-pop.png", plot = p7 + p8, width = 8, height = 5, dpi = 300)
 
 #Understand relationships between variables
 
 #relationship between GDP and Medals
-p7 = ggplot(olympics_viz_clean, aes(x = log_gdp, y = medals_per_million)) +
+p9 = ggplot(olympics_viz_clean, aes(x = log_gdp, y = medals_per_million)) +
   geom_point(alpha = 0.4) +
   geom_smooth(method = "lm", se = FALSE) +
   labs(
@@ -105,10 +144,10 @@ p7 = ggplot(olympics_viz_clean, aes(x = log_gdp, y = medals_per_million)) +
   ) +
   theme_minimal()
 
-ggsave("output/figures/fig7_GDP_medals.png", plot = p7, width = 8, height = 5, dpi = 300)
+ggsave("output/figures/fig9_GDP_medals.png", plot = p9, width = 8, height = 5, dpi = 300)
 
 #relationship 
-p8 = ggplot(olympics_viz_clean, aes(x = log_population, y = medals_per_million)) +
+p10 = ggplot(olympics_viz_clean, aes(x = log_population, y = medals_per_million)) +
   geom_point(alpha = 0.4) +
   geom_smooth(method = "lm", se = FALSE) +
   labs(
@@ -117,11 +156,10 @@ p8 = ggplot(olympics_viz_clean, aes(x = log_population, y = medals_per_million))
     y = "Medals per Million"
   ) +
   theme_minimal()
-
-ggsave("output/figures/fig8_pop_oly_success.png", plot = p8, width = 8, height = 5, dpi = 300)
+ggsave("output/figures/fig10_pop_oly_success.png", plot = p10, width = 8, height = 5, dpi = 300)
 
 # GDP vs medals per million (binned median trend)
-p9 = ggplot(olympics_viz_clean, aes(x = log_gdp, y = medals_per_million)) +
+p11 = ggplot(olympics_viz_clean, aes(x = log_gdp, y = medals_per_million)) +
   geom_point(alpha = 0.12) +
   geom_smooth(se = FALSE, linewidth = 1.2, color = "steelblue")+
   coord_cartesian(ylim = c(0, 5)) +
@@ -131,18 +169,17 @@ p9 = ggplot(olympics_viz_clean, aes(x = log_gdp, y = medals_per_million)) +
     y = "Medals per Million"
   ) +
   theme_minimal()
-
-ggsave("output/figures/fig9_GPD_medals_per_millp.png", plot = p9, width = 8, height = 5, dpi = 300)
+ggsave("output/figures/fig11_GPD_medals_per_millp.png", plot = p11, width = 8, height = 5, dpi = 300)
 
 #Total medals over time for a topmajor countries
- top_countries_total <- olympics_final %>%
+top_countries_total <- olympics_final %>%
   group_by(country) %>%
   summarise(total_medals_all_years = sum(total, na.rm = TRUE)) %>%
   slice_max(total_medals_all_years, n = 10)
 
- p10 = ggplot(top_countries_total,
-       aes(x = reorder(country, total_medals_all_years),
-           y = total_medals_all_years)) +
+p12 = ggplot(top_countries_total,
+             aes(x = reorder(country, total_medals_all_years),
+                 y = total_medals_all_years)) +
   geom_col(fill = "steelblue") +
   coord_flip() +
   labs(
@@ -152,7 +189,7 @@ ggsave("output/figures/fig9_GPD_medals_per_millp.png", plot = p9, width = 8, hei
   ) +
   theme_minimal()
 
-ggsave("output/figures/fig10_top10_total_medals.png", plot = p10, width = 8, height = 5, dpi = 300)
+ggsave("output/figures/fig12_top10_total_medals.png", plot = p12, width = 8, height = 5, dpi = 300)
 
 
 #Choropleth world map with a sequential color scale
@@ -190,7 +227,7 @@ medals_map_clean <- olympics_final %>%
       country == "Vietnam" ~ "Vietnam",
       country == "Brunei" ~ "Brunei",
       country == "Cape Verde" ~ "Cabo Verde",
-      country == "Ivory Coast" ~ "Côte d'Ivoire",
+      country == "Ivory Coast" ~ "CC4te d'Ivoire",
       country == "Macedonia" ~ "North Macedonia",
       country == "Chinese Taipei" ~ "Taiwan",
       #Adding medals to Russia when competed with different team names
@@ -230,7 +267,7 @@ world_medals <- world %>%
 # Plot
 # -----------------------------------
 
-p11 = ggplot(world_medals) +
+p13 = ggplot(world_medals) +
   geom_sf(aes(fill = total_medals), color = "white", linewidth = 0.2) +
   scale_fill_distiller(
     palette = "YlGnBu",
@@ -268,64 +305,36 @@ p11 = ggplot(world_medals) +
   ) +
   facet_wrap(~season)
 
-ggsave("output/figures/fig11_worldmap_participation.png", plot = p11, width = 8, height = 5, dpi = 300)
+ggsave("output/figures/fig13_worldmap_participation.png", plot = p13, width = 8, height = 5, dpi = 300)
 
 
-#Countries That Overperform in Olympic Success
-model <- lm(medals_per_million ~ log_gdp, data = olympics_viz_clean)
+#Distribution of Total Medals by Log GDP per Capita
 
-olympics_model <- olympics_viz_clean %>%
-  mutate(
-    expected = predict(model, newdata = olympics_viz_clean),
-    residual = medals_per_million - expected
-  )
-
-top_overperformers <- olympics_model %>%
-  group_by(country) %>%
-  summarise(avg_residual = mean(residual, na.rm = TRUE)) %>%
-  slice_max(avg_residual, n = 10)
-
-p12 = ggplot(top_overperformers,
-       aes(x = reorder(country, avg_residual), y = avg_residual)) +
-  geom_col(fill = "steelblue") +
-  coord_flip() +
-  labs(
-    title = "Countries That Overperform in Olympic Success",
-    subtitle = "Relative to GDP per capita expectations",
-    x = NULL,
-    y = "Average Overperformance (Residual)"
-  ) +
-  theme_minimal()
-
-ggsave("output/figures/fig12_overperform_countries.png", plot = p12, width = 8, height = 5, dpi = 300)
-
-
-#Distribution of Log GDP per Capita by Olympic Success Level
-
-p13 = ggplot(olympics_viz_clean ,aes(x = total, y = log_gdp)) +
+p14 = ggplot(olympics_viz_clean ,aes(x = log_gdp, y = total)) +
   geom_rug(color = "steelblue") +
-  geom_point(color = "steelblue", alpha = 0.6) +
+  geom_point(color = "steelblue", aes(size = population_total), alpha = 0.4) +
   labs(
-    title = "Distribution of Log GDP per Capita by Olympic Success Level",
-    x = "Total Medals",
-    y = "Log GDP per Capita"
+    title = "Distribution of Total Medals by Log GDP per Capita",
+    x = "Log GDP per Capita",
+    y = "Total Medals",
+    size = "Total Population"
   ) +
   theme_minimal() +
   facet_wrap(~season)
 
-ggsave("output/figures/fig13_dist_GDP_sucesslevel.png", plot = p13, width = 8, height = 5, dpi = 300)
+ggsave("output/figures/fig14_dist_GDP_sucesslevel.png", plot = p14, width = 8, height = 5, dpi = 300)
 
 
 #GDP per Capita and Olympic Medal Types
 medals_long <- olympics_viz_clean %>%
-  select(country, year, log_gdp, gold, silver, bronze) %>%
+  select(country, year, education_spending, gold, silver, bronze) %>%
   pivot_longer(
     cols = c(gold, silver, bronze),
     names_to = "medal_type",
     values_to = "medals"
   )
 
-p14 = ggplot(medals_long, aes(x = log_gdp, y = medals, color = medal_type)) +
+p15 = ggplot(medals_long, aes(x = education_spending, y = medals, color = medal_type)) +
   geom_point(alpha = 0.4) +
   geom_smooth(method = "loess", se = FALSE, linewidth = 1.5) +
   facet_wrap(~ medal_type) +
@@ -338,14 +347,14 @@ p14 = ggplot(medals_long, aes(x = log_gdp, y = medals, color = medal_type)) +
   ) +
   guides(color = "none") +
   labs(
-    title = "GDP per Capita and Olympic Medal Types",
-    x = "Log GDP per Capita",
+    title = "Education Spending and Olympic Medal Types",
+    x = "Education Spending (US$)",
     y = "Medals",
     color = ""
   ) +
   theme_minimal()
 
-ggsave("output/figures/fig14_medals_type.png", plot = p14, width = 8, height = 5, dpi = 300)
+ggsave("output/figures/fig15_medals_type.png", plot = p15, width = 8, height = 5, dpi = 300)
 
 #Top 10 Olympic Medal Composition by Country
 
@@ -356,27 +365,12 @@ country_medals <- olympics_final %>%
     silver = sum(silver, na.rm = TRUE),
     bronze = sum(bronze, na.rm = TRUE),
     total = sum(total, na.rm = TRUE),
+    mean_life_exp = mean(life_expectancy.x, na.rm  = TRUE),
     .groups = "drop"
   )
 
-norway <- country_medals %>%
-  filter(country == "Norway") %>%
-  select(gold, silver, bronze)
-
-waffle(
-  c(
-    Gold = norway$gold,
-    Silver = norway$silver,
-    Bronze = norway$bronze
-  ),
-  rows = 10,
-  colors = c("#D4AF37", "#C0C0C0", "#CD7F32"),
-  title = "Norway Olympic Medals",
-  xlab = "1 square = 1 medal"
-)
-
 top10 <- country_medals %>%
-  slice_max(total, n = 10)
+  slice_max(mean_life_exp, n = 10)
 
 medals_long_counts <- top10 %>%
   pivot_longer(
@@ -385,11 +379,9 @@ medals_long_counts <- top10 %>%
     values_to = "count"
   )
 
-p15 = ggplot(medals_long_counts, aes(fill = medal, values = count)) +
+p16 = ggplot(medals_long_counts, aes(fill = medal, values = count)) +
   geom_waffle(
-    n_rows = 10,
-    color = "white",
-    size = 0.25
+    color = "white"
   ) +
   facet_wrap(~ country, ncol = 2) +
   scale_fill_manual(
@@ -402,16 +394,10 @@ p15 = ggplot(medals_long_counts, aes(fill = medal, values = count)) +
   theme_minimal() +
   labs(title = "Olympic Medal Composition by Country",
        subtitle = "1 square = 1 medal",
-       caption = "For Top 10 Countries in Total Medal Count") +
+       caption = "For Top 10 Countries in Mean life Expectancy",
+       y = "Count of the Number of Medals (1 full column = 10 medals)") +
   theme(plot.caption = element_text(hjust = 0.5),
         plot.title = element_text(hjust = 0.5) ,
         plot.subtitle = element_text(hjust = 0.5) )
 
-ggsave("output/figures/fig15_top10_medal_comp.png", plot = p15, width = 8, height = 5, dpi = 300)
-
-
-
-
-
-
-
+ggsave("output/figures/fig16_top10_medal_comp.png", plot = p16, width = 8, height = 5, dpi = 300)
