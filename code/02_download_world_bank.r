@@ -154,6 +154,8 @@ indicators_list <- indicators_list[!sapply(indicators_list, is.null)]
 # reduce() combined two elements of a list at a time until one object is left
 indicators_final <- reduce(indicators_list, left_join, by = c("country", "year"))
 
+# load olympics raw data
+load("data_raw/olympics_raw.RData")
 olympics_indicators <- left_join(olympics_all, indicators_final, by = c("country", "year"))
 
 #save raw data
