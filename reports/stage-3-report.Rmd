@@ -1,0 +1,36 @@
+---
+title: "Olympic Performance and Economic Indicators"
+author: "Bekkmo & Guerrero"
+date: "2026-04-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*Everything in italics still needs to be edited*
+
+## Research Question: Predictive
+
+Can economic and demographic indicators be used as a predictor of Olympic medal counts across countries in the Summer and Winter Olympics?
+
+### Why does this matter?
+
+We chose this topic because we are both bring international perspectives, and the 2026 Winter Olympics in Italy sparked our interest in understanding why some countries perform better than others in the Olympic Games. This led us to explore whether economic and demographic indicators can help predict how many medals a country wins in both the Summer and Winter Olympics, *which has implications for policymakers.*
+
+### Why is predictive analysis the best for this project?
+
+Our goal for this project is to explore how a country's economic and demographic indicators are related to a country's Olympic performance in medal count. Predictive analysis is the best fit for this goal because it leverages historical data, statistical learning, and machine learning to forecast future outcomes.
+
+## Data Sources
+
+### Olympic Medal Data and World Bank Indicators
+
+Our project relies on two main data sources. The first is Olympic medal data from the Summer and Winter Games, which we web scraped from Wikipedia medal tables. The second is economic and demographic data from the World Bank Open Data platform, from which we collected a wide range of country-level indicators related to economic development.
+
+The Olympic dataset provides information on medal counts by country, year, and season, while the World Bank dataset adds economic and social context for each country-year observation. Combining these two sources allowed us to study how national characteristics may relate to Olympic performance.
+
+## Predictive Analysis
+
+*Train a machine learning model to predict your outcome variable using other variables in your data. Follow all the correct ML procedures: set aside a test set, tune your model(s) through cross-validation, and evaluate performance in the test set only after finalizing your model. Interpret the model’s performance and its limitations.*
