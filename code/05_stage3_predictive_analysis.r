@@ -39,9 +39,6 @@ data = olympics_final
 # 3. Data cleaning prior to modeling
 # -----------------------------------------------------------------------------
 # 3a. Fix duplicate life_expectancy columns.
-#     life_expectancy was listed twice in the World Bank indicator vector
-#     (once under demographics, once under health), so the join produced
-#     life_expectancy.x and life_expectancy.y (identical values). Keep one.
 if ("life_expectancy.x" %in% names(data)) {
   data <- data |>
     rename(life_expectancy = life_expectancy.x) |>
@@ -142,7 +139,7 @@ lm_results <- lm_workflow |>
   )
 
 # -----------------------------------------------------------------------------
-# 9. Model 2: Lasso Regression (regularized linear model)
+# 9. Model 2: Lasso Regression 
 # -----------------------------------------------------------------------------
 # Lasso applies an L1 penalty that can shrink coefficients exactly to zero --
 # useful when we have ~60 candidate predictors, many of which are correlated
@@ -228,7 +225,7 @@ model_comparison <- bind_rows(
   baseline_summary, lm_summary, lasso_summary, rf_summary
 )
 
-# Save both long and wide formats. Wide is easier to read in the report.
+# Save both long and wide formats. 
 dir.create("output/tables", showWarnings = FALSE, recursive = TRUE)
 write_csv(model_comparison, "output/tables/cv_model_comparison_long.csv")
 
@@ -243,8 +240,7 @@ write_csv(model_comparison_wide, "output/tables/cv_model_comparison_wide.csv")
 # 12. Pick the best model and fit on full training data, evaluate on test set
 # -----------------------------------------------------------------------------
 # Compare CV RMSE (lower is better). We programmatically pick the best of the
-# tuned models. If ties, preference order is RF > Lasso > LM (most flexible
-# wins) because we selected RF as the "advanced ML" challenge.
+# tuned models. 
 cv_rmse <- model_comparison |> filter(.metric == "rmse")
 best_model_name <- cv_rmse |>
   filter(model != "Baseline (training mean)") |>
@@ -398,7 +394,7 @@ plot_pred_vs_actual(pred_lm, "Linear Regression", "lm_pred_vs_actual")
 plot_pred_vs_actual(pred_lasso, "Lasso Regression", "lasso_pred_vs_actual")
 
 # -----------------------------------------------------------------------------
-# 15. Variable importance (only meaningful if RF wins; compute it anyway)
+# 15. Variable importance (since RF won)
 # -----------------------------------------------------------------------------
 # Refit RF with impurity importance on the full training set.
 if (best_model_name == "Random Forest") {
@@ -442,7 +438,7 @@ if (best_model_name == "Random Forest") {
 }
 
 # -----------------------------------------------------------------------------
-# 65. Lasso coefficients (for interpretability of the linear model family)
+# 16. Lasso coefficients (for interpretability of the linear model family)
 # -----------------------------------------------------------------------------
 final_lasso <- lasso_workflow |>
   finalize_workflow(select_best(lasso_results, metric = "rmse"))
