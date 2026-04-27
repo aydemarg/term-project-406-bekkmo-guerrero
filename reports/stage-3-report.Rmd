@@ -52,7 +52,7 @@ The Olympic dataset provides information on medal counts by country, year, and s
 | Education Spending | `education_spending` | Education spending of a country measures in Percentage of GDP, National currency, Percentage of expenditure |
 | Life Expectancy | `life_expectancy` | Average life expectancy of a country measures in years |
 
-*Note: The World Bank Indicators dataset includes 70 variables, excluding excluding country and year as the ID variables*
+*Note: The World Bank Indicators dataset includes 70 variables, excluding country and year as the ID variables*
 
 ## Predictive Analysis
 
