@@ -643,14 +643,14 @@ medal scale.</p>
 <h4>Predictor set</h4>
 <p>Starting from the merged Olympic–World Bank dataset, we removed any
 variable with more than 50% missing values, variables that would leak
-the outcome (<code>gold</code>, <code>silver</code>,
+the outcome (<code>year</code>, <code>gold</code>, <code>silver</code>,
 <code>bronze</code>), and the raw <code>total_medals</code> column once
 the log target was created. We kept <code>season</code> (Summer/Winter)
 as a predictor because the two Games reward different sports and country
-strengths. <code>country</code> and <code>year</code> are retained in
-the data frame so they can be used as a grouping variable for
-cross-validation, but they are marked as an ID column in the recipe so
-they do not enter the model as a predictor.</p>
+strengths. <code>country</code> is retained in the data frame so they
+can be used as a grouping variable for cross-validation, but they are
+marked as an ID column in the recipe so they do not enter the model as a
+predictor.</p>
 </div>
 <div id="preprocessing-recipe" class="section level4">
 <h4>Preprocessing recipe</h4>

@@ -115,7 +115,7 @@ We predict the total number of Olympic medals won by a country in a given Games.
 
 #### Predictor set
 
-Starting from the merged Olympic–World Bank dataset, we removed any variable with more than 50% missing values, variables that would leak the outcome (`gold`, `silver`, `bronze`), and the raw `total_medals` column once the log target was created. We kept `season` (Summer/Winter) as a predictor because the two Games reward different sports and country strengths. `country` and `year` are retained in the data frame so they can be used as a grouping variable for cross-validation, but they are marked as an ID column in the recipe so they do not enter the model as a predictor.
+Starting from the merged Olympic–World Bank dataset, we removed any variable with more than 50% missing values, variables that would leak the outcome (`year`, `gold`, `silver`, `bronze`), and the raw `total_medals` column once the log target was created. We kept `season` (Summer/Winter) as a predictor because the two Games reward different sports and country strengths. `country` is retained in the data frame so they can be used as a grouping variable for cross-validation, but they are marked as an ID column in the recipe so they do not enter the model as a predictor.
 
 #### Preprocessing recipe
 

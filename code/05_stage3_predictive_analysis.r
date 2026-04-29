@@ -51,10 +51,10 @@ data <- data |>
 #     gold/silver/bronze are components of total -> perfect leakage.
 #     total_medals is the raw target -> drop now that we have the log version.
 #     year is dropped to keep a simple cross-sectional predictor set.
-#     country and year are KEPT in the frame (needed for grouped CV) but their role in
+#     country is KEPT in the frame (needed for grouped CV) but their role in
 #     the recipe is set to "id variable" so they are not used as a predictor.
 data <- data |>
-  select(-gold, -silver, -bronze, -total_medals)
+  select(-year, -gold, -silver, -bronze, -total_medals)
 
 # Sanity check: the frame should now contain country, season, the WB
 # predictors, and log_total_medals.
@@ -83,14 +83,14 @@ cv_folds <- group_vfold_cv(train_data, group = country, v = 5)
 # 6. Preprocessing recipe
 # -----------------------------------------------------------------------------
 # Steps (executed inside each CV resample so there is NO information leakage):
-#   - Mark country and year as an id variable (kept in data, not used as a predictor).
+#   - Mark country as an id variable (kept in data, not used as a predictor).
 #   - Median-impute numeric predictors (some indicators have missing values).
 #   - Mode-impute nominal predictors.
 #   - Dummy-encode nominal predictors (season -> one dummy column).
 #   - Drop zero-variance predictors (protects lm/glmnet from degenerate cols).
 #   - Standardize numeric predictors (helps Lasso; harmless for RF).
 recipe_model <- recipe(log_total_medals ~ ., data = train_data) |>
-  update_role(country, year, new_role = "id variable") |>
+  update_role(country, new_role = "id variable") |>
   step_impute_median(all_numeric_predictors()) |>
   step_impute_mode(all_nominal_predictors()) |>
   step_dummy(all_nominal_predictors()) |>
