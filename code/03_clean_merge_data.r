@@ -1,6 +1,9 @@
 #Install packages if needed
 #install.packages("tidyverse")
 
+#----------------------------
+# 1. Libraries
+#----------------------------
 #load Packages
 library(tidyverse)
 
@@ -9,9 +12,8 @@ load("data_raw/olympics_all.RData")
 load("data_raw/world_bank_raw.RData")
 
 #----------------------------
-# Cleaning Data Set
-#---------------------------
-
+# 2. Cleaning Data Set
+#----------------------------
 #Selecting data range from most complete years
 
 # Count non-missing indicators per year

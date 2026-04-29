@@ -4,6 +4,9 @@
 #install.packages("jsonlite")
 #install.packages("furrr")
 
+#----------------------------
+# 1. Libraries
+#----------------------------
 #Libraries
 library(tidyverse)
 library(httr)
@@ -11,11 +14,9 @@ library(jsonlite)
 library(furrr)
 plan(multisession)
 
-
-#-----------------------------------
-#World Bank Data
-#------------------------------------
-
+#----------------------------
+# 2. Scrape World Bank Data
+#----------------------------
 # Define API request
 get_wb_indicator <- function(indicator, var_name) {
   url <- paste0(

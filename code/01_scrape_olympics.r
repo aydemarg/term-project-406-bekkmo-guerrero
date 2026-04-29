@@ -3,6 +3,9 @@
 #install.packages("rvest")
 #install.packages("janitor")
 
+#----------------------------
+# 1. Libraries
+#----------------------------
 # Packages
 library(tidyverse)
 library(rvest)
@@ -10,9 +13,8 @@ library(janitor)
 #Web Scraping
 
 #-----------------------------------
-#Summer Olympics
-#------------------------------------
-
+# 2. Scrape Summer Olympics Data
+#-----------------------------------
 #scrape the category page, get all links
 url = "https://en.wikipedia.org/wiki/Category:Summer_Olympics_medal_tables"
 page = read_html(url)
@@ -115,9 +117,8 @@ olympics_clean |>
   filter(n > 1)
 
 #-----------------------------------
-#Winter Olympics
-#------------------------------------
-
+# 3. Scrape Winter Olympics Data
+#-----------------------------------
 # Winter Olympics links
 url_winter = "https://en.wikipedia.org/wiki/Category:Winter_Olympics_medal_tables"
 page_winter = read_html(url_winter)

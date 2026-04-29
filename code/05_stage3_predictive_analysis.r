@@ -6,8 +6,6 @@
 #install.packages("tidymodels")
 #install.packages("glmnet")
 #install.packages("vip")
-#install.packages("gt")
-#install.packages("webshot2")
 #install.packages("patchwork")
 
 # -------------------------------
@@ -18,19 +16,14 @@ library(tidymodels)
 library(glmnet)
 library(ranger)
 library(vip)
-library(gt)
 library(readr)
 library(dplyr)
-library(webshot2)
 library(patchwork)
 
 # -------------------------------
 # 2. Load data
 # -------------------------------
 load("data_clean/olympics_final.RData")
-
-#check object name 
-#ls()
 
 #assign to data
 data = olympics_final
@@ -66,7 +59,6 @@ data <- data |>
 # Sanity check: the frame should now contain country, season, the WB
 # predictors, and log_total_medals.
 #glimpse(data)
-
 
 # -----------------------------------------------------------------------------
 # 4. Grouped train/test split
@@ -107,7 +99,6 @@ recipe_model <- recipe(log_total_medals ~ ., data = train_data) |>
 
 # Inspect what the model actually sees:
 #recipe_model |> prep() |> juice() |> glimpse()
-
  
 # -----------------------------------------------------------------------------
 # 7. Baseline: "always predict the training-set mean"
@@ -468,15 +459,3 @@ save(
 # if (exists("cl")) stopCluster(cl)
 
 message("Script 5 complete. Outputs saved to /output.")
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 

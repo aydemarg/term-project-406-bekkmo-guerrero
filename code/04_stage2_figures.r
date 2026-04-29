@@ -5,14 +5,19 @@
 #install.packages("sf")
 #install.packages("waffle")
 
+#----------------------------
+# 1. Libraries
+#----------------------------
 #Packages
-
 library(tidyverse)
 library(patchwork)
 library(waffle)
 library(rnaturalearth)
 library(sf)
 
+#----------------------------
+# 2. Exploring Variables
+#----------------------------
 #Load Data
 load("data_clean/olympics_final.RData")
 
@@ -80,10 +85,9 @@ ggsave("output/figures/fig5_raw_dist_LifeExpectancy.png", plot = p5, width = 8, 
 
 ggsave("output/figures/fig4-5_raw_dist_Educ-Life.png", plot = p4 + p5, width = 8, height = 5, dpi = 300)
 
-#--------------------------
-#Data log Transformation
-#--------------------------
-
+#----------------------------
+# 3. Transforming Variables
+#----------------------------
 #Plots after transformation
 #Medals Distribution 
 
@@ -201,19 +205,15 @@ p12 = ggplot(top_countries_total,
 
 ggsave("output/figures/fig12_top10_total_medals.png", plot = p12, width = 8, height = 5, dpi = 300)
 
-
+#----------------------------
+# 4. Plot 1: Map
+#----------------------------
 #Choropleth world map with a sequential color scale
 
-# -----------------------------------
 # Get world map data
-# -----------------------------------
-
 world <- ne_countries(scale = "medium", returnclass = "sf")
 
-# -----------------------------------
 # Aggregate Olympic medals by country and Fix country names to improve matching
-# -----------------------------------
-
 medals_map_clean <- olympics_final %>%
   group_by(country, season) %>%
   summarise(total_medals = sum(total, na.rm = TRUE), .groups = "drop") %>%
@@ -256,27 +256,18 @@ medals_map_clean <- olympics_final %>%
     "Unified Team"
   ))
 
-# -----------------------------------
 # Ensure all countries exist for both seasons
-# -----------------------------------
-
 medals_map_complete <- medals_map_clean %>%
   tidyr::complete(
     country = unique(world$name),
     season = c("Summer", "Winter")
   )
 
-# -----------------------------------
 # Join map with medal data
-# -----------------------------------
-
 world_medals <- world %>%
   left_join(medals_map_complete, by = c("name" = "country"))
 
-# -----------------------------------
-# Plot
-# -----------------------------------
-
+# plotting map
 p13 = ggplot(world_medals) +
   geom_sf(aes(fill = total_medals), color = "white", linewidth = 0.2) +
   scale_fill_distiller(
@@ -317,9 +308,9 @@ p13 = ggplot(world_medals) +
 
 ggsave("output/figures/fig13_worldmap_participation.png", plot = p13, width = 8, height = 5, dpi = 300)
 
-
-#Distribution of Total Medals by Log GDP per Capita
-
+#--------------------------------------------------
+# 5. Plot 2: Total Medals by Log GDP per Capita
+#--------------------------------------------------
 p14 = ggplot(olympics_viz_clean ,aes(x = log_gdp, y = total)) +
   geom_rug(color = "steelblue") +
   geom_point(color = "steelblue", aes(size = population_total), alpha = 0.4) +
@@ -334,8 +325,9 @@ p14 = ggplot(olympics_viz_clean ,aes(x = log_gdp, y = total)) +
 
 ggsave("output/figures/fig14_dist_GDP_sucesslevel.png", plot = p14, width = 8, height = 5, dpi = 300)
 
-
-#GDP per Capita and Olympic Medal Types
+#---------------------------------------------------------
+# 6. Plot 3: Education Spending by Olympic Medal Types
+#---------------------------------------------------------
 medals_long <- olympics_viz_clean %>%
   select(country, year, education_spending, gold, silver, bronze) %>%
   pivot_longer(
@@ -366,8 +358,9 @@ p15 = ggplot(medals_long, aes(x = education_spending, y = medals, color = medal_
 
 ggsave("output/figures/fig15_medals_type.png", plot = p15, width = 8, height = 5, dpi = 300)
 
-#Top 10 Olympic Medal Composition by Country
-
+#-------------------------------------------------------------------
+# 7. Plot 4: Olympic Medal Composition by Top 10 Life Expectancy
+#-------------------------------------------------------------------
 country_medals <- olympics_final %>%
   group_by(country) %>%
   summarise(

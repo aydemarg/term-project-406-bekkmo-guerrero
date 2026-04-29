@@ -9,7 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 ## Research Question: Predictive
 
 Can economic and demographic indicators be used as a predictor of Olympic medal counts across countries in the Summer and Winter Olympics?
@@ -17,7 +16,6 @@ Can economic and demographic indicators be used as a predictor of Olympic medal 
 ### Why does this matter?
 
 We chose this topic out of genuine curiosity. We both bring international perspectives, and the 2026 Winter Olympics in Italy got us wondering why some countries consistently win more medals than others. That led us to ask whether economic and demographic indicators can help predict a country's medal count in the Summer and Winter Olympics. While the project is driven by our own interest in the question, we can also imagine practical uses, for example, a model that predicts medals from structural country characteristics could give sports ministries or National Olympic Committees a benchmark for comparing their own performance against structurally similar countries.
-
 
 ### Why is predictive analysis the best for this project?
 
@@ -175,17 +173,17 @@ The figures below plot test-set predictions against actual values for each of th
 #### Linear Regression 
 
 ![](../output/figures/lm_pred_vs_actual_medals.png)
-Linear Regression produces a much narrower spread of predictions, clustered in a tight band around the training-set mean. The model rarely predicts very low or very high medal counts, which is why its CV RMSE is only marginally better than the baseline. **The under-prediction of high-medal countries is even more severe than for Random Forest (displayed below Lasso Regression).**
+Linear Regression produces a much narrower spread of predictions, clustered in a tight band around the training-set mean. The model rarely predicts very low or very high medal counts, which is why its CV RMSE is only marginally better than the baseline. The under-prediction of high-medal countries, due to many observations being clustered about zero on the x-axis, is even more severe than for both Lasso Regression and Random Forest (displayed below).
 
 #### Lasso Regression
 
 ![](../output/figures/lasso_pred_vs_actual_medals.png)
-Lasso falls between the two: its predictions span a wider range than Linear Regression but **still narrower than Random Forest**. The improvement over Linear Regression comes from dropping correlated and uninformative predictors, which stabilizes the remaining coefficients. However, this model still lacks capturing non-linearity and interactions.
+Lasso falls between the two: its predictions span a wider range than Linear Regression but still narrower than Random Forest, still over-predicting many observations. The improvement over Linear Regression comes from dropping correlated and uninformative predictors, which stabilizes the remaining coefficients. However, this model still lacks capturing non-linearity and interactions.
 
 #### Random Forest
 
 ![](../output/figures/fig17_pred_vs_actual_medals.png)
-Random Forest spreads predictions over the widest range of the three models, **from roughly 1 to 45 medals**, but still systematically under-predicts the highest-medal countries; actual medal counts of 100+ are predicted at 25–45. This compression at the top is expected for any model trained on a long-tailed target with grouped CV: the held-out test countries include cases that are structurally unlike anything in the training set.
+Random Forest spreads predictions over the widest range of the three models, but still systematically under-predicts the highest-medal countries; actual medal counts of 100+ are predicted at 25–45. This compression at the top is expected for any model trained on a long-tailed target with grouped CV: the held-out test countries include cases that are structurally unlike anything in the training set.
 
 ### Interpretations
 
